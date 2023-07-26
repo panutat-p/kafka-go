@@ -8,22 +8,23 @@ services:
     environment:
       - KAFKA_ENABLE_KRAFT=yes
       - ALLOW_PLAINTEXT_LISTENER=yes
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CREATE_TOPICS=hello:1:1
     restart: always
-  init-kafka:
-    image: 'bitnami/kafka:3.5'
-    depends_on:
-      - kafka
-    entrypoint: [ '/bin/sh', '-c' ]
-    command: |
-      "
-      # blocks until kafka is reachable
-      kafka-topics.sh --bootstrap-server kafka:9092 --list
+  # init-kafka:
+  #   image: 'bitnami/kafka:3.5'
+  #   depends_on:
+  #     - kafka
+  #   entrypoint: [ '/bin/sh', '-c' ]
+  #   command: |
+  #     "
+  #     # blocks until kafka is reachable
+  #     kafka-topics.sh --bootstrap-server kafka:9092 --list
       
-      echo -e 'Creating kafka topics'
-      kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic hello --replication-factor 1 --partitions 1
+  #     echo -e 'Creating kafka topics'
+  #     kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic hello --replication-factor 1 --partitions 1
       
-      echo -e 'Successfully created the following topics:'
-      kafka-topics.sh --bootstrap-server kafka:9092 --list
-      "
+  #     echo -e 'Successfully created the following topics:'
+  #     kafka-topics.sh --bootstrap-server kafka:9092 --list
+  #     "
